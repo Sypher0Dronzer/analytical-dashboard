@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AreaChart,
   Area,
@@ -44,12 +44,21 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 const CompanyAreaGraph = () => {
   const { vehiclesByCompanyAndYear } = useStore();
+  const [selectedBrands, setSelectedBrands] = useState([]);
 
   // Assign colors to companies
   const companyColors = vehiclesByCompanyAndYear.reduce((acc, item, index) => {
-    acc[item.company] = colors[index ]; // Cycle through colors
+    acc[item.company] = colors[index % colors.length]; // Cycle through colors
     return acc;
   }, {});
+
+  // Handle brand selection
+  const toggleBrand = (brand) => {
+    setSelectedBrands((prev) =>
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+    );
+  };
+  // this will remove the brand if its already present also useful for removing from the tags section
 
   return (
     <motion.div
@@ -62,28 +71,75 @@ const CompanyAreaGraph = () => {
         Total Vehicles By Model Year
       </h2>
 
+      {/* Brand Selector */}
+      <div className="mb-4">
+        <select
+          onChange={(e) => toggleBrand(e.target.value)}
+          className="p-2 bg-gray-700 text-gray-200 rounded-md"
+        >
+          <option value="">Select a brand</option>
+          {vehiclesByCompanyAndYear.map((companyData) => (
+            <option key={companyData.company} value={companyData.company}>
+              {companyData.company}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Selected Brands */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {selectedBrands.length > 0 ? (
+          selectedBrands.map((brand) => (
+            <div
+              key={brand}
+              className="flex items-center bg-gray-700 text-gray-200 px-3 py-1 rounded-full"
+            >
+              {brand}
+              <button
+                className="ml-2 text-red-400 hover:text-red-600"
+                onClick={() => toggleBrand(brand)}
+              >
+                ×
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-gray-400">Showing all brands</p>
+        )}
+      </div>
+
       <div className="pr-2">
         <ResponsiveContainer width="100%" height={500}>
           <AreaChart>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" type="number" domain={[1997, 'dataMax']} interval={'preserveStartEnd'} tick={{ fontSize: 13, fill: "#9ca3af" }}/>
-            <YAxis tick={{ fontSize: 13, fill: "#9ca3af" }}/>
+            <XAxis
+              dataKey="year"
+              type="number"
+              domain={['dataMin', "dataMax"]}
+              interval={"preserveStartEnd"}
+              tick={{ fontSize: 13, fill: "#9ca3af" }}
+            />
+            <YAxis tick={{ fontSize: 13, fill: "#9ca3af" }} />
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: "12px", fontWeight: "thin" }} />
 
-            {vehiclesByCompanyAndYear.map((companyData) => (
-              <Area
-                key={companyData.company}
-                type="monotone"
-                data={companyData.data}
-                dataKey="count"
-                name={companyData.company}
-                stackId="1"
-                stroke={companyColors[companyData.company]}
-                fill={companyColors[companyData.company]}
-                fillOpacity={0.7}
-              />
-            ))}
+            {vehiclesByCompanyAndYear
+              .filter((companyData) =>
+                selectedBrands.length === 0 || selectedBrands.includes(companyData.company)
+              )
+              .map((companyData) => (
+                <Area
+                  key={companyData.company}
+                  type="monotone"
+                  data={companyData.data}
+                  dataKey="count"
+                  name={companyData.company}
+                  stackId="1"
+                  stroke={companyColors[companyData.company]}
+                  fill={companyColors[companyData.company]}
+                  fillOpacity={0.7}
+                />
+              ))}
           </AreaChart>
         </ResponsiveContainer>
       </div>

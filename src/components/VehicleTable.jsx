@@ -38,12 +38,12 @@ const VehicleTable = () => {
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-gray-700 text-white text-sm sm:text-sm md:text-base sm:font-semibold font-medium">
-            <th className="sm:p-3 hidden sm:block"></th>
-            <th className="sm:p-3">Model</th>
-            <th className="sm:p-3">Brand</th>
-            <th className="sm:p-3">EV Type</th>
-            <th className="sm:p-3">Produced Units</th>
-            <th className="sm:p-3">% of Total Vehicles</th>
+            <th className="sm:p-3 py-2 px-1 hidden sm:block"></th>
+            <th className="sm:p-3 py-2 px-1">Model</th>
+            <th className="sm:p-3 py-2 px-1">Brand</th>
+            <th className="sm:p-3 py-2 px-1 text-center">Type</th>
+            <th className="sm:p-3 py-2 px-1 text-center">Produced Units</th>
+            <th className="sm:p-3 py-2 px-1 text-center hidden sm:block">% of Total Vehicles</th>
           </tr>
         </thead>
         <tbody className="text-xs sm:text-sm">
@@ -56,16 +56,16 @@ const VehicleTable = () => {
                   index % 2 != 0 ? "bg-gray-800" : "bg-gray-850"
                 } hover:bg-gray-700 transition`}
               >
-                <td className="sm:p-3 text-gray-300 hidden sm:block">
+                <td className="sm:p-3 py-2 px-1 text-gray-300 hidden sm:block">
                   {index + 1}
                 </td>
-                <td className="sm:p-3 text-gray-200">{data.model}</td>
-                <td className="sm:p-3 text-gray-200">{data.make}</td>
-                <td className="sm:p-3 text-gray-200">{data.evType}</td>
-                <td className="sm:p-3 text-gray-200 text-center">
+                <td className="sm:p-3 py-2 px-1 text-gray-200">{data.model}</td>
+                <td className="sm:p-3 py-2 px-1 text-gray-200">{data.make}</td>
+                <td className="sm:p-3 py-2 px-1 text-gray-200 text-center">{data.evType}</td>
+                <td className="sm:p-3 py-2 px-1 text-gray-200 text-center">
                   {data.count}
                 </td>
-                <td className="p-3 text-gray-200 text-center">
+                <td className="p-3 text-gray-200 text-center  hidden sm:block">
                   {((data.count / totalVehicles) * 100).toFixed(2)}%
                 </td>
               </tr>

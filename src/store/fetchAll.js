@@ -1,0 +1,190 @@
+import { create } from "zustand";
+import { fetchEVData } from "../utils/csvParser";
+
+export const useStore = create((set) => ({
+  evData: [],
+  countyCount: {},
+  cityCount: {},
+  totalVehicles: 0,
+  totalBEV: 0,
+  totalPHEV: 0,
+  averageElectricRange: 0,
+  topCAFV: [],
+  vehiclesByYear: [],
+  vehiclesByMake: [],
+  vehicleLocations: [],
+  vehiclesByCompanyAndYear: [],
+  isFetching: false,
+  modelTableData: [],
+  countryTop: [],
+  cityTop: [],
+
+  fetchData: async () => {
+    set({ isFetching: true });
+    try {
+      const parsedData = await fetchEVData();
+      const countryCount = {},
+        cityCount = {};
+      const cafvCount = {};
+      let totalBEV = 0;
+      let totalPHEV = 0;
+      let totalRange = 0;
+      let rangeCount = 0;
+      const yearCount = {};
+      const makeCount = {};
+      const companyYearData = {};
+      const modelInfo = {};
+      const electricUtility = {};
+
+      parsedData.forEach((ev) => {
+        // to get the electric utility
+        const utility = ev["Electric Utility"];
+        electricUtility[utility] = (electricUtility[utility] || 0) + 1;
+
+        // to get the model and its associated details
+        const model = ev.Model;
+        if (!modelInfo[model]) {
+          modelInfo[model] = {
+            count: 1,
+            make: ev.Make,
+            evType:
+              ev["Electric Vehicle Type"] === "Battery Electric Vehicle (BEV)"
+                ? "BEV"
+                : "PHEV",
+          };
+        } else {
+          modelInfo[model].count += 1;
+        }
+        // to get vehicles in country and city
+        countryCount[ev.County] = (countryCount[ev.County] || 0) + 1;
+        cityCount[ev.City] = (cityCount[ev.City] || 0) + 1;
+
+        // to count number of BEV and PHEV
+        if (ev["Electric Vehicle Type"] === "Battery Electric Vehicle (BEV)") {
+          totalBEV++;
+        } else if (
+          ev["Electric Vehicle Type"] ===
+          "Plug-in Hybrid Electric Vehicle (PHEV)"
+        ) {
+          totalPHEV++;
+        }
+
+        // to get yr and number of models
+        const year = ev["Model Year"];
+        if (year) {
+          yearCount[year] = (yearCount[year] || 0) + 1;
+        }
+
+        //this is for data in aread graph
+        const company = ev.Make;
+        if (year && company) {
+          if (!companyYearData[company]) {
+            companyYearData[company] = {};
+          }
+          companyYearData[company][year] =
+            (companyYearData[company][year] || 0) + 1;
+        }
+
+        //to get maker and count of cars they made
+        const make = ev.Make;
+        if (make) {
+          makeCount[make] = (makeCount[make] || 0) + 1;
+        }
+
+        // Count each CAFV (Clean Alternative Fuel Vehicle) type
+        if (ev["Clean Alternative Fuel Vehicle (CAFV) Eligibility"]) {
+          const cafvType =
+            ev["Clean Alternative Fuel Vehicle (CAFV) Eligibility"];
+          cafvCount[cafvType] = (cafvCount[cafvType] || 0) + 1;
+        }
+
+        // Calculate total range
+        const range = Number(ev["Electric Range"]);
+        if (!isNaN(range) && range > 0) {
+          totalRange += range;
+          rangeCount++;
+        }
+      });
+      //Object to table Model Table data
+      const modelTableData = Object.entries(modelInfo)
+        .map(([model, details]) => ({
+          model,
+          ...details,
+        }))
+        .sort((a, b) => b.count - a.count);
+
+      // ----------------------------------end of parsedData--------------------------
+      //Country and state counts to array
+      const countryTop = Object.entries(countryCount)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 10);
+
+      const cityTop = Object.entries(cityCount)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value -a.value)
+        .slice(0, 10);
+
+      // Compute average electric range
+      const averageElectricRange =
+        rangeCount > 0 ? (totalRange / rangeCount).toFixed(2) : 0;
+
+      // Convert cfva to array
+      const topCAFV = Object.entries(cafvCount)
+        // .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([name, value]) => ({
+          name: name.includes("unknown")
+            ? "CAFV Unknown"
+            : name.includes("Eligible")
+            ? "CAFV Eligible"
+            : "CAFV Not Eligible",
+          value,
+        }));
+
+      const vehiclesByYear = Object.entries(yearCount)
+        .map(([year, count]) => ({ year: Number(year), count }))
+        .sort((a, b) => a.year - b.year);
+
+      const vehiclesByMake = Object.entries(makeCount)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 10); // Get top 10 makes
+
+      // Convert object into array format for plotting
+      const vehiclesByCompanyAndYear = Object.entries(companyYearData).map(
+        ([company, years]) => {
+          const minYear = 1998;
+          const maxYear = 2024;
+          const completeData = [];
+
+          for (let year = minYear; year <= maxYear; year++) {
+            completeData.push({ year, count: years[year] || 0 });
+          }
+
+          return { company, data: completeData };
+        }
+      );
+
+      set({
+        evData: parsedData,
+
+        totalVehicles: parsedData.length,
+        totalBEV,
+        totalPHEV,
+        averageElectricRange,
+        topCAFV,
+        vehiclesByYear,
+        vehiclesByMake,
+        vehiclesByCompanyAndYear,
+        isFetching: false,
+        modelTableData,
+        cityTop,
+        countryTop,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      set({ isFetching: false });
+    }
+  },
+}));

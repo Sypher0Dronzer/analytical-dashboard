@@ -18,7 +18,7 @@ export default function App() {
   if (isFetching) {
     return (
       <div className="h-screen">
-        <div className="flex justify-center items-center bg-black h-full">
+        <div className="flex justify-center items-center bg-gray-900 h-full">
           <Loader className="animate-spin text-white size-10" />
         </div>
       </div>

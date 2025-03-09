@@ -38,7 +38,7 @@ const VehicleTable = () => {
     animate="visible">
       <div className="flex justify-between flex-col w-full sm:flex-row items-center flex-wrap my-4 gap-2">
         <h1 className="font-semibold text-xl">Tabulated Data of Models</h1>
-        <div className="relative sm:min-w-[350px]">
+        <div className="relative sm:min-w-[350px] px-2">
           <input
             type="text"
             placeholder="Search Models or Brands... "
@@ -46,7 +46,7 @@ const VehicleTable = () => {
             onChange={handleSearch}
             value={searchTerm}
           />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+          <Search className="absolute left-[20px] top-1/2 -translate-y-1/2 text-gray-400" size={18} />
         </div>
       </div>
       {/* Table Begins here */}

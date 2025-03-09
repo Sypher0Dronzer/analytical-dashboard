@@ -27,7 +27,7 @@ const EVCityMap = () => {
       <h2 className="text-lg font-semibold text-gray-100 text-center mb-4">
         EV Distribution by City
       </h2>
-      <MapContainer center={[37.8, -96]} zoom={4} className="h-[500px] w-full rounded-lg">
+      <MapContainer  center={[37.8, -96]} zoom={4} className="h-[500px] w-full rounded-lg">
       <SetView center={defaultCenter} zoom={defaultZoom} />
         <TileLayer
           // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -37,9 +37,9 @@ const EVCityMap = () => {
         
         {cityEVData
           .filter(({ latitude, longitude }) => latitude !== undefined && longitude !== undefined)
-          .map(({ city, latitude, longitude, value: count }) => (
+          .map(({ city, latitude, longitude, value: count },index) => (
             <CircleMarker
-              key={city}
+              key={index}
               center={[latitude, longitude]}
               radius={Math.sqrt(count) / 20}
               fillColor={colorScale(count)}

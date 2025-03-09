@@ -7,6 +7,7 @@ import { CountryCountChart } from "../components/Charts/CountryCountChart";
 import { CityCountChart } from "../components/Charts/CityCountChart";
 import HybridCarsBrands from "../components/Charts/HybridCarsBrands";
 import EVCityMap from "../components/EVCityMap";
+// import EVCityMap2 from "../components/EVCityMap2";
 
 const AnalyticsPage = () => {
   return (
@@ -15,6 +16,7 @@ const AnalyticsPage = () => {
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 space-y-8">
         <CompanyAreaGraph />
         <EVCityMap/>
+        {/* <EVCityMap2/> */}
         <HybridCarsBrands/>
         <MakerCountChart />
         <CountryCountChart />

@@ -217,8 +217,8 @@ export const useStore = create((set) => ({
         
        ;
        const cityTop=cityTotal.sort((a,b)=> b.value - a.value).slice(0,10);
-       console.log(cityTotal[0])
-       console.log(cityTop)
+      //  console.log(cityTotal[0])
+      //  console.log(cityTop)
 
       // Compute average electric range
       const averageElectricRange =

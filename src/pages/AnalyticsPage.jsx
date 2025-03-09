@@ -12,10 +12,9 @@ const AnalyticsPage = () => {
       <Header title="Analytics" />
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 space-y-8">
         <CompanyAreaGraph />
-<MakerCountChart />
-            <CountryCountChart />
-            <CityCountChart />
-        
+        <MakerCountChart />
+        <CountryCountChart />
+        <CityCountChart />
       </main>
     </div>
   );

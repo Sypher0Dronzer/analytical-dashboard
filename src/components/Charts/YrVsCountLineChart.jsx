@@ -29,18 +29,18 @@ const YrVsCountLineChart = () => {
   const { vehiclesByYear: countData } = useStore();
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl py-6 px-2 sm:px-6 border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-100">
+      <h2 className="text-lg font-medium mb-4 text-gray-100 text-center">
         Total Vehicles By Model Year
       </h2>
 
       <div className="h-96">
         <ResponsiveContainer width={"100%"} height={"100%"}>
-          <LineChart data={countData}>
+          <LineChart data={countData} margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
             <XAxis
               dataKey={"year"}

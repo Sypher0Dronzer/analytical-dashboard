@@ -12,14 +12,14 @@ export  const MakerCountChart = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.2 }}
 		>
-      <h2 className="text-lg font-bold  mb-2">Top 10 Total Vehicles By Make</h2>
+      <h2 className="text-lg font-semibold text-gray-100 text-center mb-4">Top 10 Total Vehicles By Make</h2>
       
       <ResponsiveContainer width="100%" height={500}>
-        <BarChart layout="vertical" data={vehiclesByMake}>
+        <BarChart layout="vertical" data={vehiclesByMake} margin={{top: 0, right: 0, left: 0, bottom: 0}}>
           <XAxis type="number" 
           tick={{ fontSize: 13, fill: "#9ca3af" }}
           />
-          <YAxis type="category" dataKey="name" width={100} 
+          <YAxis type="category" angle={-30} dataKey="name" width={100} 
           tick={{ fontSize: 13, fill: "#9ca3af" }} 
           />
           <Tooltip
@@ -29,7 +29,7 @@ export  const MakerCountChart = () => {
 							}}
 							itemStyle={{ color: "#E5E7EB" }}
 						/>
-          <Bar dataKey="value" fill="#6366F1" barSize={30} />
+          <Bar dataKey="value" fill="#10B981" barSize={30} />
         </BarChart>
       </ResponsiveContainer>
     </motion.div>

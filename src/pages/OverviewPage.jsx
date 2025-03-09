@@ -7,6 +7,7 @@ import Cafv from "../components/Charts/Cafv";
 import VehicleType from "../components/Charts/VehicleType";
 import YrVsCountLineChart from "../components/Charts/YrVsCountLineChart";
 import { useStore } from "../store/fetchAll";
+import EVTypeYearly from "../components/Charts/EVTypeYearly";
 
 const OverviewPage = () => {
   const {totalVehicles,totalBEV,
@@ -56,6 +57,7 @@ const OverviewPage = () => {
           <Cafv />
           <VehicleType />
         </div>
+        <EVTypeYearly/>
       </main>
     </div>
   );

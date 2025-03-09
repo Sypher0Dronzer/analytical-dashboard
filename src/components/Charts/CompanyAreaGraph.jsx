@@ -86,7 +86,7 @@ const CompanyAreaGraph = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-100">
+      <h2 className="text-lg font-medium mb-4 text-gray-100 text-center">
         Total Vehicles By Model Year
       </h2>
 

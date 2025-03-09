@@ -61,17 +61,17 @@ const EVTrendsChart = () => {
 
   return (
     <motion.div
-      className="p-6 bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700"
+      className="py-6 px-2 sm:px-6 bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-100">
+      <h2 className="text-lg font-semibold text-gray-100 text-center mb-4">
         EV Registration Trends in Top 10 Cities
       </h2>
       
       <ResponsiveContainer width="100%" height={450}>
-        <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
+        <BarChart data={chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
           <XAxis dataKey="city" angle={-30} textAnchor="end" height={60} tick={{ fontSize: 13, fill: "#9ca3af" }} />
           <YAxis tick={{ fontSize: 13, fill: "#9ca3af" }} />
@@ -90,7 +90,7 @@ const EVTrendsChart = () => {
           ))}
         </BarChart>
       </ResponsiveContainer>
-     <p className=" mb-4 text-gray-400 text-center">This chart showcases EV registration trends in the top 10 cities, revealing adoption patterns over the years.</p>
+     <p className=" my-4 text-gray-400 text-center">This chart showcases EV registration trends in the top 10 cities, revealing adoption patterns over the years.</p>
     </motion.div>
   );
 };

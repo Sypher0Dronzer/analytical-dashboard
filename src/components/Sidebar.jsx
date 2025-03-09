@@ -1,19 +1,20 @@
 import {
-	BarChart2,
+	Car,
 	ChartNoAxesCombined,
+	Flame,
+	LayoutDashboard,
 	Menu,
-	Table,
-	TrendingUp,
+	
   } from "lucide-react";
   import { useState } from "react";
   import { AnimatePresence, motion } from "framer-motion";
   import { Link } from "react-router";
   
   const SIDEBAR_ITEMS = [
-	{ name: "Overview", icon: BarChart2, color: "#F59E0B", href: "/" },
+	{ name: "Overview", icon: LayoutDashboard, color: "#F59E0B", href: "/" },
 	{ name: "Analytics", icon: ChartNoAxesCombined , color: "#6EE7B7", href: "/analytics" },
-	{ name: "Vehicles", icon: Table, color: "#EC4899", href: "/vehicles" },
-	{ name: "Trends", icon: TrendingUp, color: "#3B82F6", href: "/trends" },
+	{ name: "Vehicles", icon: Car, color: "#EC4899", href: "/vehicles" },
+	{ name: "Trends", icon: Flame, color: "#3B82F6", href: "/trends" },
   ];
   
   const Sidebar = () => {

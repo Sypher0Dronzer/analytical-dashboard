@@ -38,10 +38,28 @@ export const useStore = create((set) => ({
       const modelInfo = {};
       const electricUtility = {};
       const cityYearlyData = {};
+      const bevPhevByYear = {};
+
       parsedData.forEach((ev) => {
+
+        // for bev and phev trend
+        const year = ev["Model Year"];
+        const evType = ev["Electric Vehicle Type"];
+
+        if (year && evType) {
+          if (!bevPhevByYear[year]) {
+            bevPhevByYear[year] = { year: Number(year), BEV: 0, PHEV: 0 };
+          }
+
+          if (evType === "Battery Electric Vehicle (BEV)") {
+            bevPhevByYear[year].BEV++;
+          } else if (evType === "Plug-in Hybrid Electric Vehicle (PHEV)") {
+            bevPhevByYear[year].PHEV++;
+          }
+        }
+
         // to get ev registration based on per yr for top 10 cities
         const city = ev.City;
-        const year = ev["Model Year"];
 
         if (city && year) {
           if (!cityYearlyData[city]) {
@@ -124,25 +142,28 @@ export const useStore = create((set) => ({
 
       // ----------------------------------end of parsedData--------------------------
 
+      // for bev and phev analysis
+      const bevPhevTrend = Object.values(bevPhevByYear).sort((a, b) => a.year - b.year);
+
+
+      // for production trend on a yrly basis
       const productionTrendYrbasis = Object.entries(companyYearData)
-  .map(([company, years]) => {
-    let total = 0;
-    const completeData = [];
+        .map(([company, years]) => {
+          let total = 0;
+          const completeData = [];
 
-    for (const year in years) {
-      const count = years[year];
-      if (count > 0) {
-        total += count;
-        completeData.push({ year: Number(year), count });
-      }
-    }
+          for (const year in years) {
+            const count = years[year];
+            if (count > 0) {
+              total += count;
+              completeData.push({ year: Number(year), count });
+            }
+          }
 
-    return { company, total, data: completeData };
-  })
-  .sort((a, b) => b.total - a.total) // Sort by total vehicle count
-  .slice(0, 10); // Get top 10 companies
-
-        console.log(productionTrendYrbasis[0])
+          return { company, total, data: completeData };
+        })
+        .sort((a, b) => b.total - a.total) 
+        .slice(0, 10);
 
 
       // Get top 10 cities based on total EV registrations
@@ -230,7 +251,8 @@ export const useStore = create((set) => ({
         modelTableData,
         cityTop,
         countryTop,
-        cityEvAdoption,productionTrendYrbasis
+        cityEvAdoption,
+        productionTrendYrbasis,bevPhevTrend
       });
     } catch (error) {
       console.error("Error fetching data:", error);

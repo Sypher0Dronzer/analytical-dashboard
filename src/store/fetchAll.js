@@ -20,6 +20,7 @@ export const useStore = create((set) => ({
   cityTop: [],
   cityEvAdoption: [],
   productionTrendYrbasis: [],
+  cityTotal:[],
 
   fetchData: async () => {
     set({ isFetching: true });
@@ -40,7 +41,10 @@ export const useStore = create((set) => ({
       const cityYearlyData = {};
       const bevPhevByYear = {};
 
-      parsedData.forEach((ev) => {
+      parsedData.forEach((ev,index) => {
+        if(index== parsedData.length-1){
+          return null
+        }
 
         // for bev and phev trend
         const year = ev["Model Year"];
@@ -91,7 +95,24 @@ export const useStore = create((set) => ({
         // to get vehicles in country and city
         countryCount[ev.County] = (countryCount[ev.County] || 0) + 1;
 
-        cityCount[ev.City] = (cityCount[ev.City] || 0) + 1;
+        function extractCoordinates(inputString) {
+          const coordinatesString = inputString.slice(7);
+          const [longitudeStr, latitudeStr] = coordinatesString.split(' ');
+          const longitude = parseFloat(longitudeStr);
+          const latitude = parseFloat(latitudeStr);
+          return { longitude, latitude };
+        }
+        // console.log(ev['Vehicle Location'])
+        // if(!ev['Vehicle Location'])
+        // console.log(ev['Vehicle Location'].slice(7))
+        if (!cityCount[ev.City]) {
+          const { longitude, latitude } = extractCoordinates(ev['Vehicle Location']);        
+          cityCount[ev.City] = { count: 0, latitude, longitude };
+        }
+        else{
+
+          cityCount[ev.City].count += 1;
+        }
 
         // to count number of BEV and PHEV
         if (ev["Electric Vehicle Type"] === "Battery Electric Vehicle (BEV)") {
@@ -177,6 +198,7 @@ export const useStore = create((set) => ({
         }))
         .sort((a, b) => b.total - a.total) // Sort by total EV registrations
         .slice(0, 10); // Take only top 10 cities
+
       //Object to table Model Table data
       const modelTableData = Object.entries(modelInfo)
         .map(([model, details]) => ({
@@ -190,10 +212,13 @@ export const useStore = create((set) => ({
         .sort((a, b) => b.value - a.value)
         .slice(0, 10);
 
-      const cityTop = Object.entries(cityCount)
-        .map(([name, value]) => ({ name, value }))
-        .sort((a, b) => b.value - a.value)
-        .slice(0, 10);
+      const cityTotal = Object.entries(cityCount)
+        .map(([name, value]) => ({ name, value:value.count,latitude:value.latitude,longitude:value.longitude }))
+        
+       ;
+       const cityTop=cityTotal.sort((a,b)=> b.value - a.value).slice(0,10);
+       console.log(cityTotal[0])
+       console.log(cityTop)
 
       // Compute average electric range
       const averageElectricRange =
@@ -239,7 +264,7 @@ export const useStore = create((set) => ({
       set({
         evData: parsedData,
 
-        totalVehicles: parsedData.length,
+        totalVehicles: parsedData.length-1,
         totalBEV,
         totalPHEV,
         averageElectricRange,
@@ -252,7 +277,7 @@ export const useStore = create((set) => ({
         cityTop,
         countryTop,
         cityEvAdoption,
-        productionTrendYrbasis,bevPhevTrend
+        productionTrendYrbasis,bevPhevTrend,cityTotal
       });
     } catch (error) {
       console.error("Error fetching data:", error);

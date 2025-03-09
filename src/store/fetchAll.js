@@ -18,6 +18,8 @@ export const useStore = create((set) => ({
   modelTableData: [],
   countryTop: [],
   cityTop: [],
+  cityEvAdoption: [],
+  productionTrendYrbasis: [],
 
   fetchData: async () => {
     set({ isFetching: true });
@@ -35,8 +37,21 @@ export const useStore = create((set) => ({
       const companyYearData = {};
       const modelInfo = {};
       const electricUtility = {};
-
+      const cityYearlyData = {};
       parsedData.forEach((ev) => {
+        // to get ev registration based on per yr for top 10 cities
+        const city = ev.City;
+        const year = ev["Model Year"];
+
+        if (city && year) {
+          if (!cityYearlyData[city]) {
+            cityYearlyData[city] = { total: 0, yearlyData: {} };
+          }
+          cityYearlyData[city].total++;
+          cityYearlyData[city].yearlyData[year] =
+            (cityYearlyData[city].yearlyData[year] || 0) + 1;
+        }
+
         // to get the electric utility
         const utility = ev["Electric Utility"];
         electricUtility[utility] = (electricUtility[utility] || 0) + 1;
@@ -57,6 +72,7 @@ export const useStore = create((set) => ({
         }
         // to get vehicles in country and city
         countryCount[ev.County] = (countryCount[ev.County] || 0) + 1;
+
         cityCount[ev.City] = (cityCount[ev.City] || 0) + 1;
 
         // to count number of BEV and PHEV
@@ -70,7 +86,7 @@ export const useStore = create((set) => ({
         }
 
         // to get yr and number of models
-        const year = ev["Model Year"];
+
         if (year) {
           yearCount[year] = (yearCount[year] || 0) + 1;
         }
@@ -105,6 +121,41 @@ export const useStore = create((set) => ({
           rangeCount++;
         }
       });
+
+      // ----------------------------------end of parsedData--------------------------
+
+      const productionTrendYrbasis = Object.entries(companyYearData)
+  .map(([company, years]) => {
+    let total = 0;
+    const completeData = [];
+
+    for (const year in years) {
+      const count = years[year];
+      if (count > 0) {
+        total += count;
+        completeData.push({ year: Number(year), count });
+      }
+    }
+
+    return { company, total, data: completeData };
+  })
+  .sort((a, b) => b.total - a.total) // Sort by total vehicle count
+  .slice(0, 10); // Get top 10 companies
+
+        console.log(productionTrendYrbasis[0])
+
+
+      // Get top 10 cities based on total EV registrations
+      const cityEvAdoption = Object.entries(cityYearlyData)
+        .map(([city, { total, yearlyData }]) => ({
+          city,
+          total,
+          yearlyData: Object.entries(yearlyData)
+            .map(([year, count]) => ({ year: Number(year), count }))
+            .sort((a, b) => a.year - b.year),
+        }))
+        .sort((a, b) => b.total - a.total) // Sort by total EV registrations
+        .slice(0, 10); // Take only top 10 cities
       //Object to table Model Table data
       const modelTableData = Object.entries(modelInfo)
         .map(([model, details]) => ({
@@ -112,8 +163,6 @@ export const useStore = create((set) => ({
           ...details,
         }))
         .sort((a, b) => b.count - a.count);
-
-      // ----------------------------------end of parsedData--------------------------
       //Country and state counts to array
       const countryTop = Object.entries(countryCount)
         .map(([name, value]) => ({ name, value }))
@@ -122,7 +171,7 @@ export const useStore = create((set) => ({
 
       const cityTop = Object.entries(cityCount)
         .map(([name, value]) => ({ name, value }))
-        .sort((a, b) => b.value -a.value)
+        .sort((a, b) => b.value - a.value)
         .slice(0, 10);
 
       // Compute average electric range
@@ -181,6 +230,7 @@ export const useStore = create((set) => ({
         modelTableData,
         cityTop,
         countryTop,
+        cityEvAdoption,productionTrendYrbasis
       });
     } catch (error) {
       console.error("Error fetching data:", error);

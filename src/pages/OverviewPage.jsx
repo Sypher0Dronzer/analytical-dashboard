@@ -1,12 +1,8 @@
-import { BarChart2, Cable, Car, PlugZap, ShoppingBag, Users, Zap } from "lucide-react";
+import { Cable, Car, PlugZap,  Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
-import CompanyAreaGraph from "../components/Charts/CompanyAreaGraph";
-import { MakerCountChart } from "../components/Charts/MakerCountChart";
-import { CountryCountChart } from "../components/Charts/CountryCountChart";
-import { CityCountChart } from "../components/Charts/CityCountChart";
 import Cafv from "../components/Charts/Cafv";
 import VehicleType from "../components/Charts/VehicleType";
 import YrVsCountLineChart from "../components/Charts/YrVsCountLineChart";
@@ -54,13 +50,12 @@ const OverviewPage = () => {
         </motion.div>
 
         {/* CHARTS */}
-        <CompanyAreaGraph />
+        <YrVsCountLineChart />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 sm:gap-8 gap-4 my-8">
           <Cafv />
           <VehicleType />
         </div>
-        <YrVsCountLineChart />
       </main>
     </div>
   );

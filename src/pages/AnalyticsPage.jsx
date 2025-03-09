@@ -1,18 +1,24 @@
-import React from 'react'
-import { MakerCountChart } from '../components/Charts/MakerCountChart'
-import { CountryCountChart } from '../components/Charts/CountryCountChart'
-import { CityCountChart } from '../components/Charts/CityCountChart'
-import Header from '../components/common/Header'
+import React from "react";
+
+import Header from "../components/common/Header";
+import CompanyAreaGraph from "../components/Charts/CompanyAreaGraph";
+import { MakerCountChart } from "../components/Charts/MakerCountChart";
+import { CountryCountChart } from "../components/Charts/CountryCountChart";
+import { CityCountChart } from "../components/Charts/CityCountChart";
 
 const AnalyticsPage = () => {
   return (
-    <div>
-        <Header title="Analytics" />
-      <MakerCountChart />
-        <CountryCountChart />
-        <CityCountChart />
+    <div className="flex-1 overflow-auto relative z-10">
+      <Header title="Analytics" />
+      <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 space-y-8">
+        <CompanyAreaGraph />
+<MakerCountChart />
+            <CountryCountChart />
+            <CityCountChart />
+        
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default AnalyticsPage
+export default AnalyticsPage;

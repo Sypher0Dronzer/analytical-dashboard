@@ -1,5 +1,6 @@
 import {
 	BarChart2,
+	ChartNoAxesCombined,
 	Menu,
 	Table,
 	TrendingUp,
@@ -9,9 +10,10 @@ import {
   import { Link } from "react-router";
   
   const SIDEBAR_ITEMS = [
-	{ name: "Overview", icon: BarChart2, color: "#6366f1", href: "/" },
-	{ name: "Table", icon: Table, color: "#8B5CF6", href: "/table" },
-	{ name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
+	{ name: "Overview", icon: BarChart2, color: "#F59E0B", href: "/" },
+	{ name: "Analytics", icon: ChartNoAxesCombined , color: "#6EE7B7", href: "/analytics" },
+	{ name: "Vehicles", icon: Table, color: "#EC4899", href: "/vehicles" },
+	{ name: "Trends", icon: TrendingUp, color: "#3B82F6", href: "/trends" },
   ];
   
   const Sidebar = () => {

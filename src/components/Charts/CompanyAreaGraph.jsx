@@ -13,14 +13,24 @@ import { useStore } from "../../store/fetchAll";
 import { motion } from "framer-motion";
 
 const colors = [
-  "#6366F1", "#8B5CF6", "#EC4899", "#10B981", "#F59E0B", "#EF4444", "#3B82F6", "#22C55E",
-  "#EAB308", "#DB2777", "#14B8A6", "#9333EA", "#F87171", "#FACC15", "#4ADE80", "#60A5FA",
-  "#D946EF", "#F472B6", "#A78BFA", "#F97316", "#16A34A", "#BE185D", "#06B6D4", "#B91C1C",
-  "#FBBF24", "#0EA5E9", "#7C3AED", "#EA580C", "#2563EB", "#15803D", "#C026D3", "#E11D48",
-  "#E879F9", "#F43F5E", "#0284C7", "#10B981", "#D97706", "#4F46E5"
+  "#6366F1",
+  "#8B5CF6",
+  "#EC4899",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#3B82F6",
+  "#22C55E",
+  "#EAB308",
+  "#DB2777",
+  "#14B8A6",
+  "#9333EA",
+  "#F87171",
+  "#FACC15",
+  "#4ADE80",
+  "#60A5FA",
 ];
 
-// Custom Tooltip Component
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload || payload.length === 0) return null;
   return (
@@ -45,10 +55,12 @@ const CustomTooltip = ({ active, payload, label }) => {
 const CompanyAreaGraph = () => {
   const { vehiclesByCompanyAndYear } = useStore();
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [minYear, setMinYear] = useState(1998);
+  const [maxYear, setMaxYear] = useState(2024);
 
   // Assign colors to companies
   const companyColors = vehiclesByCompanyAndYear.reduce((acc, item, index) => {
-    acc[item.company] = colors[index % colors.length]; // Cycle through colors
+    acc[item.company] = colors[index % colors.length];
     return acc;
   }, {});
 
@@ -58,7 +70,14 @@ const CompanyAreaGraph = () => {
       prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     );
   };
-  // this will remove the brand if its already present also useful for removing from the tags section
+
+  // Filtered data based on year selection
+  const filteredData = vehiclesByCompanyAndYear.map((companyData) => ({
+    ...companyData,
+    data: companyData.data.filter(
+      (entry) => entry.year >= minYear && entry.year <= maxYear
+    ),
+  }));
 
   return (
     <motion.div
@@ -71,19 +90,63 @@ const CompanyAreaGraph = () => {
         Total Vehicles By Model Year
       </h2>
 
-      {/* Brand Selector */}
-      <div className="mb-4">
-        <select
-          onChange={(e) => toggleBrand(e.target.value)}
-          className="p-2 bg-gray-700 text-gray-200 rounded-md"
-        >
-          <option value="">Select a brand</option>
-          {vehiclesByCompanyAndYear.map((companyData) => (
-            <option key={companyData.company} value={companyData.company}>
-              {companyData.company}
-            </option>
-          ))}
-        </select>
+      <div className="flex items-end justify-between flex-wrap">
+        {/* Year Range Selector */}
+        <div className="flex gap-4 mb-4">
+          <div>
+            <label className="block text-gray-400 text-sm">Min Year</label>
+            <select
+              value={minYear}
+              onChange={(e) => setMinYear(Number(e.target.value))}
+              className="p-2 bg-gray-700 text-gray-200 rounded-md"
+            >
+              {Array.from(
+                { length: maxYear - 1998 + 1 },
+                (_, i) => 1998 + i
+              ).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-gray-400 text-sm">Max Year</label>
+            <select
+              value={maxYear}
+              onChange={(e) => {
+                const selectedYear = Number(e.target.value);
+                setMaxYear(minYear > selectedYear ? 2024 : selectedYear);
+              }}
+              className="p-2 bg-gray-700 text-gray-200 rounded-md"
+            >
+              {Array.from(
+                { length: 2024 - minYear + 1 },
+                (_, i) => minYear + i
+              ).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Brand Selector */}
+        <div className="mb-4">
+          <select
+            onChange={(e) => toggleBrand(e.target.value)}
+            className="p-2 bg-gray-700 text-gray-200 rounded-md"
+          >
+            <option value="">Select a brand</option>
+            {vehiclesByCompanyAndYear.map((companyData) => (
+              <option key={companyData.company} value={companyData.company}>
+                {companyData.company}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Selected Brands */}
@@ -115,7 +178,7 @@ const CompanyAreaGraph = () => {
             <XAxis
               dataKey="year"
               type="number"
-              domain={['dataMin', "dataMax"]}
+              domain={[minYear, maxYear]} // Dynamic range update
               interval={"preserveStartEnd"}
               tick={{ fontSize: 13, fill: "#9ca3af" }}
             />
@@ -123,9 +186,11 @@ const CompanyAreaGraph = () => {
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{ fontSize: "12px", fontWeight: "thin" }} />
 
-            {vehiclesByCompanyAndYear
-              .filter((companyData) =>
-                selectedBrands.length === 0 || selectedBrands.includes(companyData.company)
+            {filteredData
+              .filter(
+                (companyData) =>
+                  selectedBrands.length === 0 ||
+                  selectedBrands.includes(companyData.company)
               )
               .map((companyData) => (
                 <Area

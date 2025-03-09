@@ -1,6 +1,18 @@
 import React, { useState } from "react";
 import { useStore } from "../store/fetchAll";
 import { Search } from "lucide-react";
+import { motion } from "framer-motion";
+
+const tableVariants = {
+  hidden: { opacity: 0,y:20 },
+  visible: {
+    opacity: 1,
+    y:0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+
 
 const VehicleTable = () => {
   const { modelTableData, totalVehicles } = useStore();
@@ -20,7 +32,9 @@ const VehicleTable = () => {
     setFilteredProducts(filtered);
   };
   return (
-    <div className="overflow-x-auto sm:p-4 p-2 bg-gray-900 rounded-lg shadow-lg">
+    <motion.div className="overflow-x-auto  bg-gray-900 rounded-lg shadow-lg"  variants={tableVariants}
+    initial="hidden"
+    animate="visible">
       <div className="flex justify-between items-center flex-wrap my-4 gap-2">
         <h1 className="font-semibold text-xl">Tabulated Data of Models</h1>
         <div className="relative min-w-[350px]">
@@ -73,7 +87,7 @@ const VehicleTable = () => {
           })}
         </tbody>
       </table>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,12 +1,75 @@
-# React + Vite
+# Analytical Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Dashboard Preview](https://analytical-dashboard-sypher.netlify.app/preview.png)
 
-Currently, two official plugins are available:
+## Overview
+This is an analytical dashboard built using **React**, **Recharts**, **Framer Motion**, and **Tailwind CSS**. It provides insightful data visualization, including pie charts, bar graphs, and other interactive components.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Link To the Website](https://analytical-dashboard-sypher.netlify.app/)
 
-## Expanding the ESLint configuration
+## Features
+- 📊 **Data Visualization**: Uses `Recharts` for interactive graphs.
+- 🎭 **Framer Motion**: Smooth animations for a modern UI.
+- 🎨 **Tailwind CSS**: Styled for a sleek and responsive design.
+- 🚀 **Performance Optimized**: Uses best practices for fast rendering.
+- 📡 **State Management**: Data fetching and state management via a global store.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technologies Used
+- **React.js** (with Vite for fast development)
+- **Recharts** (for visualizing data)
+- **Framer Motion** (for smooth animations)
+- **Tailwind CSS** (for styling)
+
+## Installation
+To run the project locally, follow these steps:
+
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/yourusername/analytical-dashboard.git
+cd analytical-dashboard
+```
+
+### 2️⃣ Install Dependencies
+```sh
+npm install
+```
+
+### 3️⃣ Start Development Server
+```sh
+npm run dev
+```
+
+The project will run at `http://localhost:5173/`.
+
+## Folder Structure
+```
+📂 analytical-dashboard
+├── 📁 src
+│   ├── 📁 components  # Reusable UI components
+│   ├── 📁 pages       # Page views
+│   ├── 📁 store       # Global state management
+│   ├── 📁 assets      # Images and static files
+│   ├── 📄 main.jsx    # Root file
+│   ├── 📄 App.jsx     # Main component
+├── 📄 package.json    # Project dependencies
+├── 📄 README.md       # Project documentation
+```
+
+## Key Components
+- **`Cafv.jsx`**: Displays the CAFV-eligible vehicle distribution using a pie chart.
+- **`Dashboard.jsx`**: Main dashboard component containing multiple visualizations.
+- **`fetchAll.js`**: Manages API requests and state handling.
+
+## Deployment
+The project is deployed on **Netlify**. To deploy:
+```sh
+git push origin main
+```
+Netlify will automatically build and deploy the latest changes.
+
+## Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
+
+## License
+MIT License © 2025 Your Name
+

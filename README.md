@@ -56,19 +56,19 @@ The project will run at `http://localhost:5173/`.
 ```
 
 ## Key Components
-- **`Cafv.jsx`**: Displays the CAFV-eligible vehicle distribution using a pie chart.
-- **`Dashboard.jsx`**: Main dashboard component containing multiple visualizations.
-- **`fetchAll.js`**: Manages API requests and state handling.
+- **`TrendsPage.jsx`**:  
+  - Contains two vertical bar charts:  
+    - **EV Registration Trends**: Showcases EV adoption patterns in the top 10 cities over the years.  
+    - **EV Manufacturer Growth Trends**: Highlights production changes of top EV manufacturers over time.  
 
-## Deployment
-The project is deployed on **Netlify**. To deploy:
-```sh
-git push origin main
-```
-Netlify will automatically build and deploy the latest changes.
+- **`AnalyticsPage.jsx`**:  
+  - Displays key insights with multiple charts:  
+    - **Top 10 Cities with Most EVs**  
+    - **EV Distribution by Country**  
+    - **Top 10 EV Manufacturers by Production**  
+    - **Area Chart**: Yearly EV production trends categorized by brand.  
 
-## Contributing
-Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
+- **`store/fetchAll.js`**: Handles API requests and manages global state using Zustand.  
 
 ## License
 MIT License © 2025 Your Name

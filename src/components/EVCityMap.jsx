@@ -36,7 +36,7 @@ const EVCityMap = () => {
         />
         
         {cityEVData
-          .filter(({ latitude, longitude }) => latitude !== undefined && longitude !== undefined)
+          .filter(({ latitude, longitude,value: count}) => latitude !== undefined && longitude !== undefined && count >0)
           .map(({ city, latitude, longitude, value: count },index) => (
             <CircleMarker
               key={index}

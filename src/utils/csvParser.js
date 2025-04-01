@@ -2,7 +2,7 @@ import Papa from "papaparse";
 
 export async function fetchEVData() {
   try {
-    const response = await fetch("/Electric_Vehicle_Population_Data.csv"); // Ensure the file is in the `public` folder
+    const response = await fetch("/Electric_Vehicle_Population_Data.csv");
     const csvText = await response.text();
 
     const parsedData = await new Promise((resolve) => {

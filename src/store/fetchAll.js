@@ -24,8 +24,10 @@ export const useStore = create((set) => ({
 
   fetchData: async () => {
     set({ isFetching: true });
+    let b4Error =0
+    let parsedData
     try {
-      const parsedData = await fetchEVData();
+     parsedData = await fetchEVData();
       const countryCount = {},
         cityCount = {};
       const cafvCount = {};
@@ -42,6 +44,7 @@ export const useStore = create((set) => ({
       const bevPhevByYear = {};
 
       parsedData.forEach((ev,index) => {
+        b4Error=index
         if(index== parsedData.length-1){
           return null
         }
@@ -105,11 +108,11 @@ export const useStore = create((set) => ({
         // console.log(ev['Vehicle Location'])
         // if(!ev['Vehicle Location'])
         // console.log(ev['Vehicle Location'].slice(7))
-        if (!cityCount[ev.City]) {
+        if (!cityCount[ev.City] && ev['Vehicle Location']) {
           const { longitude, latitude } = extractCoordinates(ev['Vehicle Location']);        
           cityCount[ev.City] = { count: 0, latitude, longitude };
         }
-        else{
+        else if(ev.City !=null){
 
           cityCount[ev.City].count += 1;
         }
@@ -281,6 +284,7 @@ export const useStore = create((set) => ({
       });
     } catch (error) {
       console.error("Error fetching data:", error);
+      console.log(parsedData[b4Error])
       set({ isFetching: false });
     }
   },

@@ -1,6 +1,7 @@
 # Analytical Dashboard
 
-![Dashboard Preview](https://analytical-dashboard-sypher.netlify.app/preview.png)
+![image](https://github.com/user-attachments/assets/01ff6e9a-774b-4d13-bdac-6304eb6de34f)
+
 
 ## Overview
 This is an analytical dashboard built using **React**, **Recharts**, **Framer Motion**, and **Tailwind CSS**. It provides insightful data visualization, including pie charts, bar graphs, and other interactive components.
